@@ -25,6 +25,8 @@ jobs:
           mkdir -p out
           curl -sL https://github.com/justwasm/go/releases/download/go1.27.0-justwasm.9/go1.27.0-justwasm.9.js-wasm.min.tar.gz \
             -o out/go1.27.0-justwasm.9.js-wasm.min.tar.gz
+          curl -sL https://github.com/justwasm/go/releases/download/go1.27.0-justwasm.10/go1.27.0-justwasm.10.js-wasm.min.tar.gz \
+            -o out/go1.27.0-justwasm.10.js-wasm.min.tar.gz
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
