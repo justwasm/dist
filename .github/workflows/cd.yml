@@ -1,0 +1,42 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Go WASM
+        run: |
+          mkdir -p out
+          curl -sL https://github.com/justwasm/go/releases/download/go1.27.0-justwasm.9/go1.27.0-justwasm.9.js-wasm.min.tar.gz \
+            -o out/go1.27.0-justwasm.9.js-wasm.min.tar.gz
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
